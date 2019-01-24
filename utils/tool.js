@@ -1,17 +1,15 @@
 // copy
 export const copyToClipboard = str => {
-  const el = document.createElement("textarea");
+  const el = document.createElement('textarea');
   el.value = str;
-  el.setAttribute("readonly", "");
-  el.style.position = "absolute";
-  el.style.left = "-9999px";
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
   document.body.appendChild(el);
   const selected =
-    document.getSelection().rangeCount > 0
-      ? document.getSelection().getRangeAt(0)
-      : false;
+    document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
   el.select();
-  document.execCommand("copy");
+  document.execCommand('copy');
   document.body.removeChild(el);
   if (selected) {
     document.getSelection().removeAllRanges();
@@ -19,15 +17,6 @@ export const copyToClipboard = str => {
   }
 };
 
-// 检测桌面端还是移动端
-export const detectDeviceType = () =>
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  )
-    ? "Mobile"
-    : "Desktop";
-
-//
 /**
  * 同步执行异步操作
  * chainAsync([
@@ -85,12 +74,16 @@ export const throttle = (fn, wait) => {
   };
 };
 
-// 计算函数执行的时间
+/**
+ * 计算函数执行的时间
+ * window.performance
+ * 还有一种是用console.time() && console.timeEnd
+ */
 export const executionTime = fn => {
   const before = window.performance.now();
   fn();
   const now = window.performance.now();
-  console.log("函数执行了" + (now - before) + "毫秒.");
+  console.log('函数执行了' + (now - before) + '毫秒.');
 };
 
 // 只执行一次的函数
@@ -120,13 +113,12 @@ export const gcd = (...arr) => {
  */
 export const lcm = (...arr) => {
   const gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  const _lcm = (x, y) => (x * y) / gcd(x, y);
+  const _lcm = (x, y) => x * y / gcd(x, y);
   return [...arr].reduce((a, b) => _lcm(a, b));
 };
 
 // 指定范围内的随机数
-export const randomNumberInRange = (min, max) =>
-  Math.random() * (max - min) + min;
+export const randomNumberInRange = (min, max) => Math.random() * (max - min) + min;
 
 // 求和 sum(1, 2, 3, 4);
 export const sum = (...arr) => [...arr].reduce((acc, val) => acc + val, 0);
@@ -141,8 +133,55 @@ export const isNil = val => val === undefined || val === null;
  */
 export const getURLParameters = url =>
   (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
-    (a, v) => (
-      (a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a
-    ),
+    (a, v) => ((a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a),
+    {}
+  );
+
+// 深度对比两个对象是否相等
+export const equals = (a, b) => {
+  if (a === b) return true;
+  if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
+  if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) return a === b;
+  if (a === null || a === undefined || b === null || b === undefined) return false;
+  if (a.prototype !== b.prototype) return false;
+  let keys = Object.keys(a);
+  if (keys.length !== Object.keys(b).length) return false;
+  return keys.every(k => equals(a[k], b[k]));
+};
+
+/**
+ * 深拷贝
+ * Object.assign({}, obj);和...都是浅拷贝
+ */
+export const deepClone = obj => {
+  let clone = Object.assign({}, obj);
+  Object.keys(clone).forEach(
+    key => (clone[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+  );
+  return Array.isArray(obj) ? (clone.length = obj.length) && Array.from(clone) : clone;
+};
+
+/**
+ * 合并对象
+ * 直接用assign合并的话，有相同的键会被覆盖
+ * const object = {
+    a: [{ x: 2 }, { y: 4 }],
+    b: 1
+  };
+  const other = {
+    a: { z: 3 },
+    b: [2, 3],
+    c: 'foo'
+  };
+  merge(object, other); // { a: [ { x: 2 }, { y: 4 }, { z: 3 } ], b: [ 1, 2, 3 ], c: 'foo' }
+  Object.assign({}, object, other) // {a: { z: 3 },b: [2, 3],c: 'foo'}
+ */
+export const merge = (...objs) =>
+  [...objs].reduce(
+    (acc, obj) =>
+      Object.keys(obj).reduce((a, k) => {
+        acc[k] = acc.hasOwnProperty(k) ? [].concat(acc[k]).concat(obj[k]) : obj[k];
+        return acc;
+      }, {}),
     {}
   );

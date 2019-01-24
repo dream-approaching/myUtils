@@ -1,21 +1,25 @@
 export function isPromise(obj) {
   return (
     !!obj &&
-    (typeof obj === "object" || typeof obj === "function") &&
-    typeof obj.then === "function"
+    (typeof obj === 'object' || typeof obj === 'function') &&
+    typeof obj.then === 'function'
   );
 }
-/* eslint no-useless-escape:0 */
-const reg1 = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export function isUrl(path) {
+  /* eslint no-useless-escape:0 */
+  const reg1 = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
   return reg1.test(path);
 }
 
-const reg2 = /^1[34578]\d{9}$/;
-
 export function isPhone(path) {
+  const reg2 = /^1[34578]\d{9}$/;
   return reg2.test(path);
+}
+
+export function isEmail(path) {
+  const reg3 = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+  return reg3.test(path);
 }
 
 /**
@@ -31,10 +35,16 @@ export function isHex(str) {
 export function isInWeixin() {
   let inWeixin = false;
   const ua = navigator.userAgent.toLowerCase();
-  if (ua.match(/MicroMessenger/i) == "micromessenger") {
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
     inWeixin = true;
   } else {
     inWeixin = false;
   }
   return inWeixin;
 }
+
+// 检测桌面端还是移动端
+export const detectDeviceType = () =>
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    ? 'Mobile'
+    : 'Desktop';
