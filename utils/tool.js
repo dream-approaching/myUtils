@@ -43,7 +43,7 @@ export const chainAsync = fns => {
   next();
 };
 
-// debounce
+// debounce 防抖
 export const debounce = (fn, ms = 0) => {
   let timeoutId;
   return function(...args) {
@@ -52,7 +52,7 @@ export const debounce = (fn, ms = 0) => {
   };
 };
 
-// throttle
+// throttle 节流
 export const throttle = (fn, wait) => {
   let inThrottle, lastFn, lastTime;
   return function() {
