@@ -17,14 +17,14 @@ export const sleeps = ms => new Promise(resolve => setTimeout(resolve, ms));
  */
 export function formatTimestamp(ms) {
   var date = new Date(ms);
-  var month = date.getMonth();
-  var day = date.getDate();
+  var month = "0" + date.getMonth();
+  var day = "0" + date.getDate();
   var year = date.getFullYear();
-  var hours = date.getHours();
+  var hours = "0" + date.getHours();
   var minutes = "0" + date.getMinutes();
   var seconds = "0" + date.getSeconds();
 
-  var dateStr = `${year}-${month}-${day}`;
-  var time = `${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
+  var dateStr = `${year}-${month.substr(-2)}-${day.substr(-2)}`;
+  var time = `${hours.substr(-2)}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
   return `${dateStr} ${time}`;
 }
