@@ -1,4 +1,5 @@
 ```
+docs
 // 删除指定索引的item, 返回一个新数组,不改变原数组
 export function removeArrIndex(arr, index) {
   const arrBackups = arr;
