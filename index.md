@@ -1,54 +1,128 @@
-## 目录结构
-index.md  
-部分目录结构如下：
+```
+// 删除指定索引的item, 返回一个新数组,不改变原数组
+export function removeArrIndex(arr, index) {
+  const arrBackups = arr;
+  arr = arrBackups.slice(0, index);
+  arr = arr.concat(arrBackups.slice(index + 1));
+  return arr;
+}
+
+// 删除指定索引的item, 会改变原数组
+export function removeArr2(arr, index, num) {
+  arr.splice(index, num);
+  return arr;
+}
+
+/**
+ * 删除两个数组中重复的元素，返回一个新的数组
+ * 这个方法不好，看下面的那个
+ */
+export function clearRepeatArr(arr, repeatArr, key) {
+  const tempArr1 = [];
+  const tempArr2 = [];
+  let itemIsObject = false;
+
+  if (!Array.isArray(arr)) return console.log('arr不是数组');
+  if (!Array.isArray(repeatArr)) return console.log('repeatArr不是数组');
+
+  // 将数repeatArr 中的元素值作为tempArr1 中的键，值为true；
+  repeatArr.map((item, index) => {
+    if (typeof item === 'object') {
+      itemIsObject = true;
+      if (!key) return console.log('请传入key值');
+      return (tempArr1[repeatArr[index][key]] = true);
+    } else {
+      return (tempArr1[repeatArr[index]] = true);
+    }
+  });
+
+  if (itemIsObject && !key) return [];
+  // 过滤arr 中与repeatArr 相同的元素；
+  arr.map((item, index) => {
+    if (itemIsObject) {
+      if (!tempArr1[arr[index][key]]) {
+        return tempArr2.push(arr[index]);
+      }
+    } else if (!tempArr1[arr[index]]) {
+      return tempArr2.push(arr[index]);
+    }
+    return null;
+  });
+
+  return tempArr2;
+}
+
+// 删除两个数组中重复的元素(找出两个数组不同的元素)
+export function difference(arr, repeatArr) {
+  const setRepeatArr = new Set(repeatArr);
+  return arr.filter(item => !setRepeatArr.has(item));
+}
+
+export function differenceBy(a, b, fn) {
+  const s = new Set(b.map(fn));
+  return a.filter(x => !s.has(fn(x)));
+}
+
+// 返回一个两个数组中重复元素的数组
+export function intersection(a, b) {
+  const s = new Set(b);
+  return a.filter(x => s.has(x));
+}
+
+/**
+ * 数组去重
+ * Array.from可以把带有lenght属性类似数组的对象转换为数组
+ * 也可以把字符串等可以遍历的对象转换为数组
+ * 它接收2个参数，转换对象与回调函数
+ * ...和Array.from都是ES6的方法
+ */
+export function removeDuplicateArr1(arr) {
+  //利用set将[1,2,2,3,5,4,5]转化成set数据,利用array from将set转化成数组类型
+  return Array.from(new Set(arr));
+}
+
+export function removeDuplicateArr2(arr) {
+  //利用...扩展运算符将set中的值遍历出来重新定义一个数组,...是利用for...of遍历的
+  return [...new Set(arr)];
+}
+
+/**
+ * 两个数组合并去重
+ * union([1, 2, 3], [4, 3, 2]); // [1,2,3,4]
+ */
+export function union(a, b) {
+  return Array.from(new Set([...a, ...b]));
+}
+
+/**
+ * 返回指定元素在数组中的index
+ * indexOfAll([1, 2, 3, 1, 2, 3], 1) => [0,3]
+ */
+export function indexOfAll(arr, val) {
+  return arr.reduce((acc, el, i) => (el === val ? [...acc, i] : acc), []);
+}
+
+/**
+ * 最大的n个数(先排序再slice)
+ * maxN([1, 2, 3]); // [3]
+ * maxN([1, 2, 3], 2); // [3,2]
+ */
+export function maxN(arr, n = 1) {
+  return [...arr].sort((a, b) => b - a).slice(0, n);
+}
+
+/**
+ * 最小的n个数(先排序再slice)
+ * maxN([1, 2, 3]); // [1]
+ * maxN([1, 2, 3], 2); // [1,2]
+ */
+export function minN(arr, n = 1) {
+  return [...arr].sort((a, b) => a - b).slice(0, n);
+}
+
+// 随机取出数组的某一个
+export function sample(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 ```
-├── config
-├── src
-│   ├── components
-│   ├── index.js
-│   ├── layouts
-│   ├── logo.svg
-│   ├── pages
-│   │   └── home
-│   │       ├── components
-│   │       │   └── commentList
-│   │       │       ├── index.js
-│   │       │       └── style.css
-│   │       └── index.js
-│   ├── redux
-│   │   ├── reducers.js
-│   │   ├── rootSaga.js
-│   │   ├── store.js
-│   │   ├── todos
-│   │   │   ├── actions.js
-│   │   │   ├── reducers.js
-│   │   │   └── sagas.js
-│   │   └── youtubeSearch
-│   │       ├── actions.js
-│   │       ├── reducers.js
-│   │       └── sagas.js
-│   ├── router.js
-│   └── utils
-```
-
-- config 是 webpack 配置文件
-- src/components 放公共组建。
-- src/layouts 负责整个 app 的布局结构，可能存在子级路由。
-- src/pages 是页面。
-- src/redux react-redux。
-- src/utils 公共函数。
-- src/index.js 是入口文件
-- src/router.js 是顶级路由。
-
-> #### 约定
->
-> 1.  一开始的 components 都放在 pages 下面，如果有其他页面需要用到这个组件时，再抽出来放到 src/components/下面。（为了防止需求变化，如果要删除该 page，还要到 components 里面去找到这个组件，删除的时候还不确定有没有其他页面引用。）
-> 2.  src/redux 下面的文件夹都写各自的 reducer、actions、saga 等
-
-##### errorBoundary
-
-- 然后可以写一个高阶组件，把每个文件都用 ErrorBoundary 包起来
-- 如果是继承型(class extends WrapComponent)的高阶组件，则还需要在最外层包一个 ErrorBoundary
-- 如果是代理型(class extends React.Component)的高阶组件，租不需要在最外层包 ErrorBoundary
-- 子 ErrorBoundary 触发了就不会再触发父级的 ErrorBoundary 了
