@@ -1,15 +1,15 @@
 // copy
 export const copyToClipboard = str => {
-  const el = document.createElement('textarea');
+  const el = document.createElement("textarea");
   el.value = str;
-  el.setAttribute('readonly', '');
-  el.style.position = 'absolute';
-  el.style.left = '-9999px';
+  el.setAttribute("readonly", "");
+  el.style.position = "absolute";
+  el.style.left = "-9999px";
   document.body.appendChild(el);
   const selected =
     document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
   el.select();
-  document.execCommand('copy');
+  document.execCommand("copy");
   document.body.removeChild(el);
   if (selected) {
     document.getSelection().removeAllRanges();
@@ -83,7 +83,7 @@ export const executionTime = fn => {
   const before = window.performance.now();
   fn();
   const now = window.performance.now();
-  console.log('函数执行了' + (now - before) + '毫秒.');
+  console.log("函数执行了" + (now - before) + "毫秒.");
 };
 
 // 只执行一次的函数
@@ -113,7 +113,7 @@ export const gcd = (...arr) => {
  */
 export const lcm = (...arr) => {
   const gcd = (x, y) => (!y ? x : gcd(y, x % y));
-  const _lcm = (x, y) => x * y / gcd(x, y);
+  const _lcm = (x, y) => (x * y) / gcd(x, y);
   return [...arr].reduce((a, b) => _lcm(a, b));
 };
 
@@ -133,7 +133,7 @@ export const isNil = val => val === undefined || val === null;
  */
 export const getURLParameters = url =>
   (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
-    (a, v) => ((a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a),
+    (a, v) => ((a[v.slice(0, v.indexOf("="))] = v.slice(v.indexOf("=") + 1)), a),
     {}
   );
 
@@ -141,7 +141,7 @@ export const getURLParameters = url =>
 export const equals = (a, b) => {
   if (a === b) return true;
   if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
-  if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) return a === b;
+  if (!a || !b || (typeof a !== "object" && typeof b !== "object")) return a === b;
   if (a === null || a === undefined || b === null || b === undefined) return false;
   if (a.prototype !== b.prototype) return false;
   let keys = Object.keys(a);
@@ -156,7 +156,7 @@ export const equals = (a, b) => {
 export const deepClone = obj => {
   let clone = Object.assign({}, obj);
   Object.keys(clone).forEach(
-    key => (clone[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+    key => (clone[key] = typeof obj[key] === "object" ? deepClone(obj[key]) : obj[key])
   );
   return Array.isArray(obj) ? (clone.length = obj.length) && Array.from(clone) : clone;
 };
@@ -185,3 +185,16 @@ export const merge = (...objs) =>
       }, {}),
     {}
   );
+
+/**
+ * 手机号加星号
+ */
+export const phoneSecret1 = phone => {
+  const phoneStr = `${phone}`;
+  const reg = /^(\d{3})\d*(\d{4})$/;
+  return phoneStr.replace(reg, "$1****$2");
+};
+export const phoneSecret2 = phone => {
+  const phoneStr = `${phone}`;
+  return phoneStr.substr(0, 3) + "****" + phoneStr.substr(7);
+};
