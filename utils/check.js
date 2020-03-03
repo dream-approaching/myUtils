@@ -48,3 +48,13 @@ export const detectDeviceType = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     ? 'Mobile'
     : 'Desktop';
+
+export const isAndroid =
+  navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
+
+export const isIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+export const isIosQQ = isIos && / QQ/i.test(navigator.userAgent);
+export const isAndroidQQ =
+  isAndroid &&
+  /MQQBrowser/i.test(navigator.userAgent) &&
+  /QQ/i.test(navigator.userAgent.split('MQQBrowser'));
