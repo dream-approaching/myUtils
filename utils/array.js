@@ -123,3 +123,35 @@ export function minN(arr, n = 1) {
 export function sample(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+
+/**
+ * 根据给定的数组,转化成标准的label, value数组；如果给定的数组子集是字符串，那么value,label值都是该字符串
+ * @param {array} arr 目标数组
+ * @param {string} value value对应属性
+ * @param {string} label label对应属性
+ */
+export const toFormatEnums = function toFormatEnums(arr = [], value, label) {
+  return arr.map(item => {
+    return typeof item === 'string'
+      ? {
+          label: item,
+          value: item
+        }
+      : {
+          label: item[label],
+          value: item[value]
+        };
+  });
+};
+
+/**
+ * 给定给一个数组arr，找出其中一项满足item[key] = value, 若有多项则只返回第一项
+ * @param {*} value 枚举值
+ * @param {*} arr 枚举数组
+ */
+export const getEnumObject = (arr, key, value) => {
+  const res = arr.filter(function(item) {
+    return item[key] === value;
+  });
+  return res.length > 0 ? res[0] : {};
+};

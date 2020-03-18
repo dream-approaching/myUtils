@@ -22,6 +22,8 @@ export function isEmail(path) {
   return reg3.test(path);
 }
 
+export const isEmpty = val => val == null || !(Object.keys(val) || val).length;
+
 /**
  * 是否是十六进制
  */
