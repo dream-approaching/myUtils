@@ -22,7 +22,7 @@ export const dataURLtoFile = (dataurl, filename) => {
  * https://stackoverflow.com/questions/20424279/canvas-todataurl-securityerror
  * https://segmentfault.com/a/1190000012550346?utm_source=tag-newest
  */
-export const getBase64Image = imgDom => {
+export const getBase64Image = (imgDom) => {
   const canvas = document.createElement('canvas');
   canvas.width = imgDom.width;
   canvas.height = imgDom.height;
@@ -34,11 +34,27 @@ export const getBase64Image = imgDom => {
   return dataURL;
   // return dataURL.replace("data:image/png;base64,", "");
 };
-function main() {
+
+// Base64字符串转二进制
+function dataURLtoBlob(dataurl) {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {
+    type: mime,
+  });
+}
+
+function main(favicon) {
   const img = document.createElement('img');
   img.src = favicon;
   img.setAttribute('crossOrigin', 'anonymous');
-  img.onload = function() {
+  img.onload = function () {
     const data = getBase64Image(img);
     console.log(data);
   };
