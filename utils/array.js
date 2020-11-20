@@ -134,13 +134,13 @@ export const toFormatEnums = function toFormatEnums(arr = [], value, label) {
   return arr.map(item => {
     return typeof item === 'string'
       ? {
-          label: item,
-          value: item
-        }
+        label: item,
+        value: item
+      }
       : {
-          label: item[label],
-          value: item[value]
-        };
+        label: item[label],
+        value: item[value]
+      };
   });
 };
 
@@ -150,7 +150,7 @@ export const toFormatEnums = function toFormatEnums(arr = [], value, label) {
  * @param {*} arr 枚举数组
  */
 export const getEnumObject = (arr, key, value) => {
-  const res = arr.filter(function(item) {
+  const res = arr.filter(function (item) {
     return item[key] === value;
   });
   return res.length > 0 ? res[0] : {};
