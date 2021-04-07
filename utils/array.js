@@ -145,7 +145,7 @@ export const toFormatEnums = function toFormatEnums(arr = [], value, label) {
 };
 
 /**
- * 给定给一个数组arr，找出其中一项满足item[key] = value, 若有多项则只返回第一项
+ * 给定给一个数组arr2，找出其中一项满足item[key] = value, 若有多项则只返回第一项
  * @param {*} value 枚举值
  * @param {*} arr 枚举数组
  */
