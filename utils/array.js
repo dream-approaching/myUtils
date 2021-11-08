@@ -57,6 +57,14 @@ export function difference(arr, repeatArr) {
   return arr.filter(item => !setRepeatArr.has(item));
 }
 
+
+/**
+ * 复杂数组找不同(删除arr1元素中和arr2重复的元素)
+ * var a = [{id: 1},{id: 2},{id: 3}]
+ * var b = [{id: 3},{id: 4},{id: 5}]
+ * differenceBy(a, b, x => x.id); // [{id: 1},{id: 2}]
+ * differenceBy(b, a, x => x.id); // [{id: 4},{id: 5}]
+ */
 export function differenceBy(a, b, fn) {
   const s = new Set(b.map(fn));
   return a.filter(x => !s.has(fn(x)));
@@ -70,7 +78,7 @@ export function intersection(a, b) {
 
 /**
  * 数组去重
- * Array.from可以把带有lenght属性类似数组的对象转换为数组
+ * Array.from可以把带有length属性类似数组的对象转换为数组
  * 也可以把字符串等可以遍历的对象转换为数组
  * 它接收2个参数，转换对象与回调函数
  * ...和Array.from都是ES6的方法
@@ -86,12 +94,35 @@ export function removeDuplicateArr2(arr) {
 }
 
 /**
+ * 单个复杂数组去重
+ * var arr = [{id: 1},{id: 2},{id: 2},{id: 3},{id: 3},{id: 4}]
+ * uniqueElementsBy(arr, (a,b) => a.id === b.id); // [{id: 1},{id: 2},{id: 3},{id: 4}]
+ */
+export const uniqueElementsBy = (arr, fn) =>
+  arr.reduce((acc, v) => {
+    if (!acc.some(x => fn(v, x))) acc.push(v);
+    return acc;
+  }, []);
+
+/**
  * 两个数组合并去重
  * union([1, 2, 3], [4, 3, 2]); // [1,2,3,4]
  */
 export function union(a, b) {
   return Array.from(new Set([...a, ...b]));
 }
+
+/**
+ * 两个复杂数组合并去重
+ * var a = [{id: 1},{id: 2},{id: 3}]
+ * var b = [{id: 3},{id: 4},{id: 5}]
+ * unionBy(a, b, x => x.id); // [{id: 1},{id: 2},{id: 3},{id: 4},{id: 5}]
+ */
+export const unionBy = (a, b, fn) => {
+  const s = new Set(a.map(fn));
+  return Array.from(new Set([...a, ...b.filter(x => !s.has(fn(x)))]));
+};
+
 
 /**
  * 返回指定元素在数组中的index
