@@ -40,3 +40,16 @@ export function toDecimalNumber(value = 0, pointCount = 2) {
   const reg = /(\d{1,3})(?=(\d{3})+(\.|$))/g;
   return withPoint.replace(reg, '$1,');
 }
+
+// 获取字节长度 区分汉字和英文
+export function getByteLength(str = '') {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str.charCodeAt(i) > 127 || str.charCodeAt(i) == 94) {
+      len += 2;
+    } else {
+      len++;
+    }
+  }
+  return len;
+}
